@@ -1,104 +1,204 @@
-<div class="lp">
+<div class="al-page">
 
-  <!-- LEFT BRAND PANEL -->
-  <div class="lp-brand">
-    <div class="lp-brand-inner">
+  <!-- ══════════════════════════════════════════
+       BACK TO WEBSITE  (top-left)
+       ══════════════════════════════════════════ -->
+  <a routerLink="/" class="al-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Voltar ao Site
+  </a>
 
-      <div class="lp-brand-top">
-        <div class="lp-logo-wrap">
-          <img src="assets/images/logo.png" alt="Casa do Pão" class="lp-logo">
-        </div>
-        <h1 class="lp-brand-name">Casa do Pão</h1>
-        <p class="lp-brand-tagline">Handcrafted since 2010 · Lisboa</p>
+
+  <!-- ══════════════════════════════════════════
+       BRAND COLUMN  (left / desktop only)
+       ══════════════════════════════════════════ -->
+  <div class="al-brand" aria-hidden="true">
+
+    <div class="al-brand__inner">
+
+      <!-- Logo -->
+      <div class="al-brand__logo-wrap">
+        <img src="assets/images/papalocalogo.webp" alt="Papaloca" class="al-brand__logo-img">
       </div>
 
-      <div class="lp-brand-deco">
-        <div class="lp-deco-circle lp-deco-circle--1"></div>
-        <div class="lp-deco-circle lp-deco-circle--2"></div>
-        <div class="lp-deco-line"></div>
+      <div class="al-brand__text">
+        <h1 class="al-brand__name">Papaloca</h1>
+        <span class="al-brand__tagline">Restaurant</span>
       </div>
 
-      <div class="lp-brand-quote">
-        <p>"Every morning begins<br>with something beautiful."</p>
+      <!-- Ornamental rule -->
+      <div class="al-brand__rule" aria-hidden="true">
+        <span></span>
+        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+        </svg>
+        <span></span>
+      </div>
+
+      <!-- Quote -->
+      <blockquote class="al-brand__quote">
+        <p>Proporcionar momentos de puro prazer através de sabores únicos e um atendimento que faz você se sentir em casa.</p>
+      </blockquote>
+
+      <!-- Info pills -->
+      <div class="al-brand__pills">
+        <span class="al-brand__pill">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          07:00 – 22:00
+        </span>
+        <span class="al-brand__pill">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Bissau
+        </span>
+        <span class="al-brand__pill">Est. 2025</span>
       </div>
 
     </div>
+
+    <!-- Decorative food SVGs — bottom right of brand panel -->
+    <div class="al-brand__deco" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none">
+        <circle cx="25" cy="55" r="6"   fill="#c63b32" opacity="0.18"/>
+        <circle cx="42" cy="68" r="4"   fill="#c63b32" opacity="0.13"/>
+        <circle cx="12" cy="72" r="3.5" fill="#c63b32" opacity="0.10"/>
+        <circle cx="55" cy="58" r="3"   fill="#c63b32" opacity="0.11"/>
+        <circle cx="30" cy="82" r="2.5" fill="#c63b32" opacity="0.09"/>
+        <circle cx="62" cy="72" r="2"   fill="#c63b32" opacity="0.09"/>
+      </svg>
+    </div>
+
   </div>
 
-  <!-- RIGHT FORM PANEL -->
-  <div class="lp-form-panel">
-    <div class="lp-form-inner">
 
-      <!-- Mobile logo (hidden on desktop) -->
-      <div class="lp-mobile-brand">
-        <img src="assets/images/logo.png" alt="Casa do Pão">
-        <span>Casa do Pão</span>
+  <!-- ══════════════════════════════════════════
+       FORM COLUMN  (right)
+       ══════════════════════════════════════════ -->
+  <div class="al-form-panel">
+
+    <div class="al-form-inner">
+
+      <!-- Mobile logo (shown below 860px) -->
+      <div class="al-mobile-logo">
+        <img src="assets/images/papalocalogo.webp" alt="Papaloca">
+        <div class="al-mobile-logo__text">
+          <span class="al-mobile-logo__name">Papaloca</span>
+          <span class="al-mobile-logo__tag">Restaurant</span>
+        </div>
       </div>
 
-      <div class="lp-form-header">
-        <p class="lp-form-eyebrow">Admin Portal</p>
-        <h2 class="lp-form-title">Sign in</h2>
-        <p class="lp-form-sub">Enter your credentials to continue</p>
+      <!-- Header -->
+      <div class="al-form-header">
+        <div class="al-form-header__eyebrow-row">
+          <span class="al-form-header__line"></span>
+          <span class="al-form-header__eyebrow">Painel Administrativo</span>
+        </div>
+        <h2 class="al-form-header__title">Bem-vindo<br><em>de volta</em></h2>
+        <p class="al-form-header__sub">Entre com as suas credenciais para continuar.</p>
       </div>
 
-      <form class="lp-form" (ngSubmit)="login()">
+      <!-- Error alert -->
+      @if (error()) {
+        <div class="al-error" role="alert">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {{ error() }}
+        </div>
+      }
 
-        @if (error()) {
-          <div class="lp-error" role="alert">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            <span>{{ error() }}</span>
-          </div>
-        }
+      <!-- Form -->
+      <form class="al-form" (ngSubmit)="login()" autocomplete="on">
 
-        <div class="lp-field">
-          <label class="lp-label" for="lp-username">Username</label>
-          <div class="lp-input-shell">
-            <svg class="lp-input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <!-- Username -->
+        <div class="al-field">
+          <label class="al-field__label" for="al-username">Utilizador</label>
+          <div class="al-field__shell">
+            <svg class="al-field__icon" width="15" height="15" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
             <input
-              id="lp-username"
-              class="lp-input"
+              id="al-username"
+              class="al-field__input"
               type="text"
               [(ngModel)]="username"
               name="username"
-              placeholder="Enter your username"
+              placeholder="O seu nome de utilizador"
               autocomplete="username"
               required>
           </div>
         </div>
 
-        <div class="lp-field">
-          <label class="lp-label" for="lp-password">Password</label>
-          <div class="lp-input-shell">
-            <svg class="lp-input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <!-- Password -->
+        <div class="al-field">
+          <label class="al-field__label" for="al-password">Palavra-passe</label>
+          <div class="al-field__shell">
+            <svg class="al-field__icon" width="15" height="15" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="1.8">
               <rect x="3" y="11" width="18" height="11" rx="2"/>
               <path d="M7 11V7a5 5 0 0110 0v4"/>
             </svg>
             <input
-              id="lp-password"
-              class="lp-input"
-              type="password"
+              id="al-password"
+              class="al-field__input"
+              [type]="showPassword ? 'text' : 'password'"
               [(ngModel)]="password"
               name="password"
-              placeholder="Enter your password"
+              placeholder="A sua palavra-passe"
               autocomplete="current-password"
               required>
+            <!-- Eye toggle -->
+            <button
+              type="button"
+              class="al-field__eye"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword ? 'Ocultar palavra-passe' : 'Mostrar palavra-passe'">
+              @if (showPassword) {
+                <!-- Eye-off icon -->
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                  <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              } @else {
+                <!-- Eye icon -->
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              }
+            </button>
           </div>
         </div>
 
-        <button class="lp-submit" type="submit" [disabled]="loading()">
+        <!-- Submit -->
+        <button class="al-submit" type="submit" [disabled]="loading()">
           @if (loading()) {
-            <span class="lp-spin"></span>
-            Signing in…
+            <span class="al-spin"></span>
+            A entrar…
           } @else {
-            Sign In
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            Entrar
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                 stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           }
@@ -106,9 +206,13 @@
 
       </form>
 
-      <p class="lp-footer-note">Secure admin access · Casa do Pão</p>
+      <!-- Footer -->
+      <p class="al-form-footer">
+        Acesso seguro · Papaloca Restaurant
+      </p>
 
     </div>
+
   </div>
 
 </div>

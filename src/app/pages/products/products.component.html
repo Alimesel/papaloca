@@ -1,108 +1,181 @@
 <div class="pv-page">
 
-  <div class="pv-fixed-top">
+  <!-- ══ Sticky category filter bar ══ -->
+  <div class="pv-topbar">
+    <div class="pv-tabs" role="tablist" aria-label="Filter by category">
 
-    <nav class="pv-nav" aria-label="Category filter">
-      <div class="pv-nav-inner">
+      <button
+        class="pv-tab"
+        role="tab"
+        [class.active]="activeCategory() === 'all'"
+        (click)="setCategory('all')">
+        Todos
+      </button>
+
+      @for (cat of dataService.categories; track cat.id) {
         <button
           class="pv-tab"
-          [class.active]="activeCategory() === 'all'"
-          (click)="setCategory('all')">
-          All Items
+          role="tab"
+          [class.active]="activeCategory() === cat.id"
+          (click)="setCategory(cat.id)">
+          {{ cat.name }}
         </button>
-        @for (cat of dataService.categories; track cat.id) {
-          <button
-            class="pv-tab"
-            [class.active]="activeCategory() === cat.id"
-            (click)="setCategory(cat.id)">
-            {{ cat.name }}
-          </button>
-        }
-      </div>
-    </nav>
-
-  </div>
-
-  <div class="pv-body" #pvBody>
-
-    <div class="pv-container">
-
-      @if (activeCategory() !== 'all') {
-        <div class="pv-list">
-          @for (p of filteredProducts(); track p.id; let i = $index) {
-            <article class="pv-row pv-reveal" [style.animation-delay]="(i * 0.05) + 's'">
-              <div class="pv-row-img">
-                <img [src]="p.image" [alt]="p.name">
-                @if (p.badge) { <span class="pv-badge">{{ p.badge }}</span> }
-              </div>
-              <div class="pv-row-body">
-                <div class="pv-row-top">
-                  <h3 class="pv-row-name">{{ p.name }}</h3>
-                  <span class="pv-row-price">{{ p.price.toFixed(2) }} F</span>
-                </div>
-                @if (p.description) {
-                  <p class="pv-row-desc">{{ p.description }}</p>
-                }
-                <button class="pv-add" [class.added]="addedId() === p.id" (click)="addToCart(p)">
-                  @if (addedId() === p.id) {
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    Added
-                  } @else {
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Add to Order
-                  }
-                </button>
-              </div>
-            </article>
-          }
-        </div>
       }
 
-      @if (activeCategory() === 'all') {
-        @for (cat of dataService.categories; track cat.id) {
-          <div class="pv-group">
-            <div class="pv-group-head pv-reveal">
-              <div class="pv-group-left">
-                <img [src]="cat.image" [alt]="cat.name" class="pv-group-thumb">
-                <div>
-                  <span class="pv-group-sub">{{ cat.subtitle }}</span>
-                  <h2 class="pv-group-name">{{ cat.name }}</h2>
+    </div>
+  </div>
+
+
+  <!-- ══ Scrollable product feed ══ -->
+  <div class="pv-body" #pvBody>
+    <div class="pv-feed">
+
+
+      <!-- ─── SINGLE CATEGORY VIEW ─── -->
+      @if (activeCategory() !== 'all') {
+
+        <div class="pv-list">
+          @for (p of filteredProducts(); track p.id; let i = $index) {
+
+            <article
+              class="pv-card pv-reveal"
+              [style.animation-delay]="(i * 0.07) + 's'">
+
+              <!-- Image -->
+              <div class="pv-card__img-wrap">
+                <img
+                  [src]="p.image"
+                  [alt]="p.name"
+                  class="pv-card__img"
+                  loading="lazy"
+                  (load)="onImgLoad($event)">
+                @if (p.badge) {
+                  <span class="pv-card__badge">{{ p.badge }}</span>
+                }
+              </div>
+
+              <!-- Content -->
+              <div class="pv-card__content">
+                <div class="pv-card__meta">
+                  <h3 class="pv-card__name">{{ p.name }}</h3>
+                  @if (p.description) {
+                    <p class="pv-card__desc">{{ p.description }}</p>
+                  }
+                </div>
+
+                <div class="pv-card__footer">
+                  <span class="pv-card__price">{{ p.price.toFixed(2) }}<em>F</em></span>
+                  <button
+                    class="pv-card__add"
+                    [class.added]="addedId() === p.id"
+                    (click)="addToCart(p)"
+                    [attr.aria-label]="addedId() === p.id ? 'Adicionado' : 'Adicionar ao pedido'">
+                    @if (addedId() === p.id) {
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+                           stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    } @else {
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
+                        <line x1="12" y1="4" x2="12" y2="20"/>
+                        <line x1="4"  y1="12" x2="20" y2="12"/>
+                      </svg>
+                    }
+                  </button>
                 </div>
               </div>
-              <a [routerLink]="['/products', cat.id]" class="pv-group-link">View all →</a>
-            </div>
 
-            <div class="pv-list">
-              @for (p of dataService.getProductsByCategory(cat.id); track p.id; let i = $index) {
-                <article class="pv-row pv-reveal" [style.animation-delay]="(i * 0.04) + 's'">
-                  <div class="pv-row-img">
-                    <img [src]="p.image" [alt]="p.name">
-                    @if (p.badge) { <span class="pv-badge">{{ p.badge }}</span> }
-                  </div>
-                  <div class="pv-row-body">
-                    <div class="pv-row-top">
-                      <h3 class="pv-row-name">{{ p.name }}</h3>
-                      <span class="pv-row-price">{{ p.price.toFixed(2) }} F</span>
-                    </div>
+            </article>
+
+          }
+        </div>
+
+      }
+
+
+      <!-- ─── ALL CATEGORIES VIEW ─── -->
+      @if (activeCategory() === 'all') {
+
+        @for (cat of dataService.categories; track cat.id; let ci = $index) {
+
+          <!-- Category header divider -->
+          <div class="pv-divider pv-reveal">
+            <div class="pv-divider__left">
+              <span class="pv-divider__num">{{ (ci + 1).toString().padStart(2, '0') }}</span>
+              <span class="pv-divider__name">{{ cat.name }}</span>
+            </div>
+            <a [routerLink]="['/products', cat.id]" class="pv-divider__link">
+              Ver tudo
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                   stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="pv-list">
+            @for (p of dataService.getProductsByCategory(cat.id); track p.id; let i = $index) {
+
+              <article
+                class="pv-card pv-reveal"
+                [style.animation-delay]="(i * 0.06) + 's'">
+
+                <div class="pv-card__img-wrap">
+                  <img
+                    [src]="p.image"
+                    [alt]="p.name"
+                    class="pv-card__img"
+                    loading="lazy"
+                    (load)="onImgLoad($event)">
+                  @if (p.badge) {
+                    <span class="pv-card__badge">{{ p.badge }}</span>
+                  }
+                </div>
+
+                <div class="pv-card__content">
+                  <div class="pv-card__meta">
+                    <h3 class="pv-card__name">{{ p.name }}</h3>
                     @if (p.description) {
-                      <p class="pv-row-desc">{{ p.description }}</p>
+                      <p class="pv-card__desc">{{ p.description }}</p>
                     }
-                    <button class="pv-add" [class.added]="addedId() === p.id" (click)="addToCart(p)">
+                  </div>
+
+                  <div class="pv-card__footer">
+                    <span class="pv-card__price">{{ p.price.toFixed(2) }}<em>F</em></span>
+                    <button
+                      class="pv-card__add"
+                      [class.added]="addedId() === p.id"
+                      (click)="addToCart(p)"
+                      [attr.aria-label]="addedId() === p.id ? 'Adicionado' : 'Adicionar ao pedido'">
                       @if (addedId() === p.id) {
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        Added
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+                             stroke-linejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
                       } @else {
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        Add to Order
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
+                          <line x1="12" y1="4" x2="12" y2="20"/>
+                          <line x1="4"  y1="12" x2="20" y2="12"/>
+                        </svg>
                       }
                     </button>
                   </div>
-                </article>
-              }
-            </div>
+                </div>
+
+              </article>
+
+            }
           </div>
+
         }
+
       }
+
 
     </div>
   </div>

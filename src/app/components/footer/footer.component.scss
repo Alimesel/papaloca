@@ -1,276 +1,256 @@
 /* ================================================================
-   FOOTER — warm white, matches navbar aesthetic
+   FOOTER — Papaloca Restaurant
+   White · clean · professional. Palette mirrors the navbar exactly:
+   white background, #dc2626 red, neutral gray tones, no warmth.
    ================================================================ */
 
+/* ── Tokens pulled straight from the navbar ── */
+$red:        #dc2626;
+$red-dim:    rgba(220, 38, 38, 0.08);
+$text:       #111827;       /* clean near-black, no warmth          */
+$muted:      #6b7280;       /* neutral gray — not brown             */
+$subtle:     #9ca3af;       /* lighter neutral gray                 */
+$border:     #e5e7eb;       /* clean neutral hairline               */
+$border-red: rgba(220, 38, 38, 0.2);
+
+
+/* ════════════════════════════════════════════════
+   SHELL
+   ════════════════════════════════════════════════ */
 .footer {
-  background: #FAFAF6;
-  border-top: 1px solid var(--border-light);
+  background: #ffffff;
+  border-top: 1px solid $border;
 }
 
-/* ── Top grid ─────────────────────────────────────────────── */
-.footer-top {
-  display: grid;
-  grid-template-columns: 1.8fr 1fr 1fr 1.4fr;
-  gap: 3rem;
-  padding: 4rem 3rem 3.5rem;
+
+/* ════════════════════════════════════════════════
+   INNER WRAPPER
+   ════════════════════════════════════════════════ */
+.footer-inner {
   max-width: 1280px;
   margin: 0 auto;
-
-  @media (max-width: 960px) {
-    grid-template-columns: 1fr 1fr;
-    padding: 3.5rem 2rem 3rem;
-  }
-
-  @media (max-width: 560px) {
-    grid-template-columns: 1fr;
-    padding: 3rem 1.5rem 2.5rem;
-    gap: 2.5rem;
-  }
-}
-
-/* ── Brand column ─────────────────────────────────────────── */
-.footer-brand {
+  padding: 2.6rem 4rem 2.2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-}
-
-.footer-logo {
-  display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  text-decoration: none;
+  gap: 1.8rem;
+
+  @media (max-width: 768px) {
+    padding: 2.2rem 1.5rem 1.8rem;
+    gap: 1.6rem;
+  }
 }
 
-.footer-logo-img {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
 
-.footer-logo-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.footer-logo-name {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 400;
-  color: var(--text-dark);
-  letter-spacing: 0.04em;
-}
-
-.footer-logo-tag {
-  font-family: var(--font-body);
-  font-size: 0.58rem;
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.footer-tagline {
-  font-family: var(--font-body);
-  font-size: 0.84rem;
-  font-weight: 300;
-  line-height: 1.85;
-  color: var(--text-muted);
-  letter-spacing: 0.01em;
-}
-
-/* Social icons */
+/* ════════════════════════════════════════════════
+   SOCIAL PILLS ROW
+   ════════════════════════════════════════════════ */
 .footer-socials {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 0.4rem;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.social-icon {
-  width: 36px;
-  height: 36px;
-  display: flex;
+.social-pill {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-light);
-  color: var(--text-muted);
+  gap: 0.5rem;
+  padding: 0.48rem 1rem 0.48rem 0.8rem;
+  border: 1px solid $border;
+  border-radius: 999px;
+  color: $muted;
   text-decoration: none;
-  transition: all 0.3s ease;
-  border-radius: 2px;
+  transition:
+    color        0.22s ease,
+    border-color 0.22s ease,
+    background   0.22s ease,
+    transform    0.22s ease;
 
-  /* covers both stroke-based and fill-based SVG icons */
+  /* SVG — always inherits currentColor */
   svg {
+    flex-shrink: 0;
     color: inherit;
     fill: currentColor;
     stroke: none;
-    transition: color 0.3s ease;
+    transition: color 0.22s ease;
   }
 
-  /* stroke-only icons (Instagram, TikTok) override fill back to none */
   svg[fill="none"] {
     fill: none;
     stroke: currentColor;
   }
 
-  &:hover {
-    border-color: var(--btn-primary);
-    color: var(--btn-primary);
-    background: rgba(181, 120, 31, 0.06);
-  }
-}
-
-/* ── Nav / Menu columns ───────────────────────────────────── */
-.footer-col {
-  h4 {
-    font-family: var(--font-body);
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.28em;
+  span {
+    font-family: var(--font-body, Georgia, serif);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--text-dark);
-    margin-bottom: 1.4rem;
-    padding-bottom: 0.7rem;
-    border-bottom: 1px solid var(--border-light);
   }
 
-  ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-
-    li a {
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      font-weight: 300;
-      color: var(--text-muted);
-      text-decoration: none;
-      letter-spacing: 0.02em;
-      transition: color 0.28s ease;
-      position: relative;
-      display: inline-block;
-
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -1px; left: 0;
-        width: 0; height: 1px;
-        background: var(--btn-primary);
-        transition: width 0.3s ease;
-      }
-
-      &:hover {
-        color: var(--btn-primary);
-        &::after { width: 100%; }
-      }
-    }
+  &:hover {
+    color: $red;
+    border-color: $border-red;
+    background: $red-dim;
+    transform: translateY(-2px);
   }
 }
 
-/* ── Contact column ───────────────────────────────────────── */
-address { font-style: normal; }
 
-.footer-contact-row {
+/* ════════════════════════════════════════════════
+   HAIRLINE DIVIDER
+   ════════════════════════════════════════════════ */
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background: $border;
+  position: relative;
+
+  &::after {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 0 0.75rem;
+    font-size: 0.4rem;
+    color: $red;
+    opacity: 0.45;
+    letter-spacing: 0.15em;
+  }
+}
+
+
+/* ════════════════════════════════════════════════
+   CONTACT ROW
+   ════════════════════════════════════════════════ */
+.footer-contact {
   display: flex;
-  align-items: flex-start;
-  gap: 0.65rem;
-  margin-bottom: 0.85rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  row-gap: 1rem;
+}
 
-  &:last-child { margin-bottom: 0; }
+.contact-sep {
+  width: 1px;
+  height: 14px;
+  background: $border;
+  flex-shrink: 0;
+  margin: 0 1.8rem;
+
+  @media (max-width: 600px) { display: none; }
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
   svg {
     flex-shrink: 0;
-    margin-top: 2px;
-    color: var(--btn-primary);
-    opacity: 0.8;
+    color: $red;
+    fill: none;
+    stroke: currentColor;
+    opacity: 0.75;
   }
 
   span {
-    font-family: var(--font-body);
-    font-size: 0.84rem;
-    font-weight: 300;
-    color: var(--text-muted);
-    line-height: 1.65;
-    letter-spacing: 0.01em;
+    font-family: var(--font-body, Georgia, serif);
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: $muted;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+
+    @media (max-width: 480px) {
+      white-space: normal;
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+    justify-content: center;
   }
 }
 
-/* ── Divider ──────────────────────────────────────────────── */
-.footer-divider {
-  height: 1px;
-  background: var(--border-light);
-  max-width: 1280px;
-  margin: 0 auto;
-  width: calc(100% - 6rem);
 
-  @media (max-width: 960px) { width: calc(100% - 4rem); }
-  @media (max-width: 560px) { width: calc(100% - 3rem); }
-}
-
-/* ── Bottom bar ───────────────────────────────────────────── */
+/* ════════════════════════════════════════════════
+   BOTTOM BAR
+   ════════════════════════════════════════════════ */
 .footer-bottom {
+  border-top: 1px solid $border;
+  background: #fafafa;
+}
+
+.footer-bottom__inner {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 1.4rem 3rem;
+  padding: 0.9rem 4rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.9rem;
 
-  p {
-    font-family: var(--font-body);
-    font-size: 0.72rem;
-    font-weight: 300;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    padding: 0.9rem 1.5rem;
+    gap: 0.5rem;
+    justify-content: center;
   }
 
-  @media (max-width: 960px) { padding: 1.4rem 2rem; }
-
-  @media (max-width: 560px) {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.5rem;
-    padding: 1.2rem 1.5rem;
+  span {
+    font-family: var(--font-body, Georgia, serif);
+    font-size: 0.62rem;
+    font-weight: 400;
+    color: $subtle;
+    letter-spacing: 0.08em;
   }
 }
 
-/* ── Admin access link ────────────────────────────────────── */
+.footer-bottom__dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: $border;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) { display: none; }
+}
+
+/* Admin icon — discreet lock icon, no label */
 .footer-admin-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.32rem 0.75rem 0.32rem 0.6rem;
-  font-family: var(--font-body);
-  font-size: 0.60rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin-left: auto;
+  color: $subtle;
   text-decoration: none;
-  border: 1px solid var(--border-light);
-  border-radius: 2px;
-  background: transparent;
-  transition: all 0.28s ease;
-  white-space: nowrap;
+  border: 1px solid $border;
+  border-radius: 4px;
+  transition: all 0.22s ease;
+  flex-shrink: 0;
 
   svg {
-    opacity: 0.55;
-    transition: opacity 0.28s ease;
-    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
   }
 
   &:hover {
-    color: var(--espresso);
-    border-color: var(--brown-200);
-    background: rgba(181, 120, 31, 0.05);
-
-    svg { opacity: 0.9; }
+    color: $red;
+    border-color: $border-red;
+    background: $red-dim;
   }
 
-  @media (max-width: 560px) {
-    margin-top: 0.2rem;
+  @media (max-width: 768px) {
+    margin-left: 0;
   }
 }

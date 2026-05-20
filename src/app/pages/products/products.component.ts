@@ -82,6 +82,9 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.observer!.observe(el);
     });
   }
+  onImgLoad(event: Event) {
+  (event.target as HTMLImageElement).classList.add('is-loaded');
+}
 
   ngOnDestroy() { this.observer?.disconnect(); }
 }

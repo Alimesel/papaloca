@@ -1,55 +1,47 @@
 <div class="home-page">
 
 <!-- §1 — HERO -->
-<section class="stage" aria-label="Signature chocolate donut">
+<section class="hero" aria-label="Signature burger hero">
 
-  <canvas #sugarCanvas class="sugar-cvs" aria-hidden="true"></canvas>
-
-  <div class="stage-inner">
-
-    <div class="food-scene" aria-hidden="true">
-
-      <div class="ambient-glow"></div>
-
-      <div class="fruit f-left">
-        <img src="assets/images/strawberry.png" alt="Strawberry"
-             loading="eager" fetchpriority="high" decoding="sync" draggable="false">
-      </div>
-
-      <div class="donut-rig">
-        <div class="card">
-          <div class="d-face d-back">
-            <img src="assets/images/chocodonut.png" alt="Donut base"
-                 loading="eager" fetchpriority="high" decoding="sync" draggable="false">
-          </div>
-          <div class="d-face d-front">
-            <img src="assets/images/mydonut.webp" alt="Donut"
-                 loading="eager" fetchpriority="high" decoding="sync" draggable="false">
-          </div>
-        </div>
-        <div class="ground-shd"></div>
-      </div>
-
-      <div class="fruit f-right">
-        <img src="assets/images/oneberry1.webp" alt="Blueberry"
-             loading="eager" fetchpriority="high" decoding="sync" draggable="false">
-      </div>
-
-    </div>
-
-    <div class="hero-copy">
-      <h1 class="headline">
-        Um Momento de<br><em>Puro Prazer</em>
-      </h1>
-      <div class="cta-row">
-        <a routerLink="/products" class="cta cta-solid">Order now</a>
-        <a routerLink="/about"    class="cta cta-ghost">Nossa História</a>
-      </div>
-    </div>
-
+  <div class="hero-img-wrap">
+    <img
+      src="assets/images/burgerimg1.webp"
+      alt="Signature Burger"
+      class="hero-img"
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+      draggable="false">
   </div>
 
-  <div class="scroll-hint" aria-hidden="true"><div class="scroll-line"></div></div>
+  <div class="hero-content">
+    <p class="hero-kicker">Um Momento de Puro</p>
+    <h1 class="hero-heading"><em>Prazer</em></h1>
+
+    <div class="hero-icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 2v4c0 1.1.9 2 2 2h0a2 2 0 0 0 2-2V2"/>
+        <path d="M10 8v14"/>
+        <path d="M6 2v3"/>
+        <path d="M14 2v3"/>
+      </svg>
+      <span class="hero-icon-sep" aria-hidden="true"></span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a4 4 0 0 1 4 4c0 1.8-1.1 3.4-2.7 4.1L14 22h-4l.7-11.9A4.4 4.4 0 0 1 8 6a4 4 0 0 1 4-4z"/>
+      </svg>
+    </div>
+
+    <div class="hero-cta-row">
+      <a routerLink="/products" class="hero-cta hero-cta--solid">
+        Encomendar Agora
+      </a>
+    </div>
+  </div>
+
 </section>
 
 
@@ -57,92 +49,46 @@
 <section class="cats-section">
 
   <div class="cats-head reveal">
-    <span class="section-label">Explorar</span>
-    <h2>As Nossas Categorias</h2>
+    <span class="cats-label">Categorias</span>
+    <h2 class="cats-title">Escolha Seu <em>Sabor</em></h2>
+    <p class="cats-subtitle">Descubra nossas especialidades</p>
   </div>
 
-  <div class="cats-carousel">
-
-    <button class="arrow-btn arrow-prev" (click)="catPrev()" [disabled]="catIndex() === 0" aria-label="Previous category">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M15 18l-6-6 6-6"/>
-      </svg>
-    </button>
-
-    <div class="cats-track-wrap">
-      <div class="cats-track" #catTrack>
-
-        @if (dataService.loading() && dataService.categories.length === 0) {
-          @for (i of [1,2,3,4]; track i) {
-            <div class="cat-skeleton">
-              <div class="cat-skel-img"></div>
-              <div class="cat-skel-info">
-                <span class="s1"></span>
-                <span class="s2"></span>
-                <span class="s3"></span>
-              </div>
-            </div>
-          }
-        }
-
-        @for (cat of dataService.categories; track cat.id; let i = $index) {
-          <a [routerLink]="['/products', cat.id]" class="cat-card">
-            <div class="cat-card-img">
-              <img [src]="cat.image" [alt]="cat.name" loading="lazy">
-            </div>
-            <div class="cat-card-info">
-              <div class="cat-card-text">
-                <span class="cat-card-num">0{{ i + 1 }}</span>
-                <h3 class="cat-card-name">{{ cat.name }}</h3>
-                <span class="cat-card-sub">{{ cat.subtitle }}</span>
-              </div>
-              <span class="cat-card-arrow">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-        }
-      </div>
+  @if (dataService.loading() && dataService.categories.length === 0) {
+    <div class="cats-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="cat-skeleton">
+          <div class="cat-skel-img"></div>
+          <div class="cat-skel-info"><span class="s1"></span></div>
+        </div>
+      }
     </div>
+  }
 
-    <button class="arrow-btn arrow-next" (click)="catNext()" [disabled]="catIndex() === catMax" aria-label="Next category">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 18l6-6-6-6"/>
-      </svg>
-    </button>
+  @if (dataService.categories.length > 0) {
+    <div class="cats-grid">
+      @for (cat of dataService.categories; track cat.id; let i = $index) {
+        <a [routerLink]="['/products', cat.id]" class="cat-card reveal" [style.animation-delay]="(i * 0.08) + 's'">
+          <div class="cat-img-wrap">
+            <div class="cat-img-ring"></div>
+            <img [src]="cat.image" [alt]="cat.name" loading="lazy" class="cat-img">
+          </div>
+          <div class="cat-info">
+            <h3 class="cat-name">{{ cat.name }}</h3>
+            <span class="cat-rule" aria-hidden="true"></span>
+          </div>
+        </a>
+      }
+    </div>
+  }
 
-  </div>
-
-  <div class="cats-dots" role="tablist">
-    @for (cat of dataService.categories; track cat.id; let i = $index) {
-      <button class="cats-dot" role="tab" [class.active]="catIndex() === i" (click)="goToCat(i)" [attr.aria-label]="'Go to ' + cat.name"></button>
-    }
-  </div>
-
-</section>
-
-
-<!-- §3 — SPLIT BANNER -->
-<section class="split-banner">
-
-  <div class="split-copy reveal-left">
-    <span class="section-label">Fresco Preparado Todos os Dias</span>
-    <h2 class="split-title">Delicioso<br><em>Sobremesas</em></h2>
-    <p class="split-desc">
-     Desde éclairs suaves a brownies de fudge, cada sobremesa na Casa do Pão é feita à mão todas as manhãs, usando os melhores ingredientes sazonais
-    </p>
-    <a routerLink="/products" class="btn-brown">
-     Todo o Menu
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <div class="cats-cta reveal">
+    <a routerLink="/products" class="btn-red">
+      Explorar Todas as Categorias
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M5 12h14M12 5l7 7-7 7"/>
       </svg>
     </a>
-  </div>
-
-  <div class="split-img reveal-right">
-    <img src="assets/images/dessabout.png" alt="Assorted desserts" loading="lazy">
   </div>
 
 </section>
@@ -150,148 +96,74 @@
 
 <!-- §4 — ABOUT TEASER -->
 <section class="about-teaser">
-  <div class="teaser-grid">
 
-    <div class="teaser-images reveal-left">
-      <img src="assets/images/story.png" alt="Our story" loading="lazy">
+  <div class="teaser-inner">
+
+    <!-- Left: image with editorial frame treatment -->
+    <div class="teaser-visual reveal-left">
+      <div class="teaser-frame">
+        <img src="assets/images/papalocaimg.webp" alt="A nossa história" loading="lazy" class="teaser-img">
+        <div class="teaser-frame__tag">
+          <span>Est.</span>
+          <strong>1997</strong>
+        </div>
+      </div>
+      <!-- Decorative offset border -->
+      <div class="teaser-frame__shadow" aria-hidden="true"></div>
     </div>
 
+    <!-- Right: editorial copy block -->
     <div class="teaser-copy reveal-right">
-      <span class="section-label">Sobre a Casa do Pão</span>
-      <h2>Onde Todas as Manhãs <em>Começa com Alegria</em></h2>
-      <p>
-       Nascida da paixão pela arte da pastelaria, a Casa do Pão tem vindo a confeccionar à mão pastelaria, bolos e cafés especiais em Bissau desde 2025. Utilizamos apenas os melhores ingredientes — manteiga local, frutas da época, grãos de café de origem única — porque a qualidade não tem atalhos
+
+      <div class="teaser-copy__header">
+        <span class="teaser-eyebrow">
+          <span class="teaser-eyebrow__line" aria-hidden="true"></span>
+          Sobre o Papaloca
+        </span>
+        <h2 class="teaser-heading">
+          Onde Cada Refeição<br>
+          <em>Une as Pessoas</em>
+        </h2>
+      </div>
+
+      <div class="teaser-rule" aria-hidden="true">
+        <span></span>
+        <span class="teaser-rule__gem">✦</span>
+        <span></span>
+      </div>
+
+      <p class="teaser-body">
+        Inspirado nos sabores ricos da cozinha libanesa e portuguesa, o Papaloca oferece pratos artesanais, bebidas refrescantes e sobremesas irresistíveis no coração de Bissau. Das especialidades grelhadas e receitas tradicionais aos sumos frescos e criações doces, cada prato é preparado com ingredientes criteriosamente selecionados — porque uma boa refeição vai muito além do simples ato de comer. É uma experiência que fica.&nbsp;<a routerLink="/about" class="teaser-readmore">
+          Ler mais
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
       </p>
-      <a routerLink="/about" class="btn-brown">Descubra Nossa História</a>
+
+      <!-- Subtle info pills -->
+      <div class="teaser-stats">
+        <div class="teaser-stat">
+          <strong>100%</strong>
+          <span>Artesanal</span>
+        </div>
+        <div class="teaser-stat-sep" aria-hidden="true"></div>
+        <div class="teaser-stat">
+          <strong>Libanesa</strong>
+          <span>&amp; Portuguesa</span>
+        </div>
+        <div class="teaser-stat-sep" aria-hidden="true"></div>
+        <div class="teaser-stat">
+          <strong>Bissau</strong>
+          <span>Guiné-Bissau</span>
+        </div>
+      </div>
+
     </div>
 
   </div>
+
 </section>
 
-
-<!-- §5 — FEATURED PRODUCTS -->
-<section class="featured-section">
-  <div class="feat-container">
-
-    <div class="feat-header reveal">
-      <span class="section-label">Nossa Seleção</span>
-      <h2>Saboreie Nosso Mundo</h2>
-    </div>
-
-    <div class="featured-grid">
-      @for (cat of dataService.categories; track cat.id; let i = $index) {
-
-        <!-- NG8107 FIX: assign array[0] to a local variable to avoid
-             optional-chaining on a guaranteed-non-null array element -->
-        @if (dataService.getProductsByCategory(cat.id)[0]; as product) {
-          <article class="feat-card reveal" [style.animation-delay]="(i * 0.1) + 's'">
-
-            <div
-              class="feat-img-wrap"
-              [class.flipped]="flippedId() === product.id"
-              (click)="toggleFlip(product.id)">
-
-              <img
-                [src]="product.image"
-                [alt]="product.name"
-                class="feat-img"
-                loading="lazy">
-
-              <span class="feat-cat-pill">{{ cat.name }}</span>
-
-              @if (product.badge) {
-                <span class="feat-badge">{{ product.badge }}</span>
-              }
-
-              <div class="feat-overlay">
-                <a
-                  [routerLink]="['/products', cat.id]"
-                  class="feat-more-btn"
-                  (click)="$event.stopPropagation()">
-                  Mais {{ cat.name }}
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </a>
-              </div>
-
-            </div>
-
-            <div class="feat-info">
-              <div class="feat-meta">
-                <span class="feat-price">{{ product.price.toFixed(2) }} f</span>
-              </div>
-              <h3 class="feat-name">{{ product.name }}</h3>
-              <p  class="feat-desc">{{ product.description }}</p>
-
-              <button
-                class="feat-add-btn"
-                [class.added]="addedId() === product.id"
-                (click)="addToCart(product)">
-                @if (addedId() === product.id) {
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  Adicionado!
-                } @else {
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                 Adicionar à Encomenda
-                }
-              </button>
-            </div>
-
-          </article>
-        }
-      }
-    </div>
-
-    <div class="feat-cta reveal">
-      <a routerLink="/products" class="btn-brown">
-        Ver Menu Completo
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-
-  </div>
-</section>
-
-
-<!-- §6 — HOURS RIBBON -->
-<section class="hours-ribbon">
-  <div class="ribbon-inner">
-
-    <div class="ribbon-item reveal">
-      <div class="ribbon-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-        </svg>
-      </div>
-      <div><h4>Horário de Funcionamento</h4><p>Diariamente</p><p>07:00 – 23:00</p></div>
-    </div>
-
-    <div class="ribbon-divider"></div>
-
-    <div class="ribbon-item reveal">
-      <div class="ribbon-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
-        </svg>
-      </div>
-      <div><h4>Localização</h4><p>da granja do pessube</p><p>Bissau, Guinea-Bissau</p></div>
-    </div>
-
-    <div class="ribbon-divider"></div>
-
-    <div class="ribbon-item reveal">
-      <div class="ribbon-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .98h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
-        </svg>
-      </div>
-      <div><h4>Reservas</h4><p>+351 21 345 6789</p></div>
-    </div>
-
-  </div>
-</section>
 
 </div>

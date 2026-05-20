@@ -2,14 +2,16 @@ import {
   Component,
   OnInit,
   OnDestroy,
+  AfterViewInit,
   HostListener,
   NgZone,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-const SLIDE_DURATION_MS = 4500; // time each slide stays visible
-const TICK_MS           = 50;   // progress-bar update interval
+const SLIDE_DURATION_MS = 4500;
+const TICK_MS           = 50;
 
 @Component({
   selector: 'app-visit-us',
@@ -18,49 +20,77 @@ const TICK_MS           = 50;   // progress-bar update interval
   templateUrl: './visit-us.component.html',
   styleUrls: ['./visit-us.component.scss']
 })
-export class VisitUsComponent implements OnInit, OnDestroy {
+export class VisitUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /* ── Data ── */
   hours = [
-    { day: 'Segunda-feira',    time: '07:00 – 23:00' },
-    { day: 'Terça-feira',   time: '07:00 – 23:00' },
-    { day: 'Quarta-feira', time: '07:00 – 23:00' },
-    { day: 'Quinta-feira',  time: '07:00 – 23:00' },
-    { day: 'Sexta-feira',    time: '07:00 – 23:00' },
-    { day: 'Sábado',  time: '07:00 – 23:00' },
-    { day: 'Domingo',    time: '07:00 – 21:00' },
+    { day: 'Segunda-feira', time: '07:00 – 00:00' },
+    { day: 'Terça-feira',   time: '07:00 – 00:00' },
+    { day: 'Quarta-feira',  time: '07:00 – 00:00' },
+    { day: 'Quinta-feira',  time: '07:00 – 00:00' },
+    { day: 'Sexta-feira',   time: '07:00 – 00:00' },
+    { day: 'Sábado',        time: '07:00 – 00:00' },
+    { day: 'Domingo',       time: '07:00 – 00:00' },
   ];
 
   images = [
-    { src: 'assets/images/visit1.jpeg', label: 'Interior'     },
-    { src: 'assets/images/visit2.jpeg', label: 'Tables'   },
-    { src: 'assets/images/visit3.jpeg', label: 'Coffee'       },
-    { src: 'assets/images/visit4.jpeg', label: 'Beauty' },
+    { src: 'assets/images/papalocav1.webp', label: ''  },
+    { src: 'assets/images/papalocav2.webp', label: ''    },
+    { src: 'assets/images/papalocav3.webp', label: ''    },
+    { src: 'assets/images/papalocav4.webp', label: ''    },
   ];
 
   /* ── Carousel state ── */
   carouselIndex = 0;
-  progressPct   = 0;          // 0–100, drives the progress bar width
+  progressPct   = 0;
 
-  private autoTimer?: ReturnType<typeof setInterval>;
   private tickTimer?: ReturnType<typeof setInterval>;
-  private elapsed  = 0;       // ms elapsed in current slide
-  private paused   = false;
+  private elapsed   = 0;
+  private paused    = false;
 
   /* ── Lightbox state ── */
   lightboxOpen  = false;
   lightboxIndex = 0;
 
-  constructor(private ngZone: NgZone, private cdr: ChangeDetectorRef) {}
+  /* ── Scroll reveal observer ── */
+  private revealObserver?: IntersectionObserver;
+
+  constructor(
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef,
+    private elRef: ElementRef
+  ) {}
 
   /* ── Lifecycle ── */
   ngOnInit(): void {
     this.startCarousel();
   }
 
+  ngAfterViewInit(): void {
+    this.initRevealObserver();
+  }
+
   ngOnDestroy(): void {
     this.stopCarousel();
+    this.revealObserver?.disconnect();
     document.body.style.overflow = '';
+  }
+
+  /* ── Scroll reveal ── */
+  private initRevealObserver(): void {
+    this.revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    const targets = this.elRef.nativeElement.querySelectorAll('.vu-fade-up');
+    targets.forEach((el: Element) => this.revealObserver!.observe(el));
   }
 
   /* ── Today highlight ── */
@@ -75,17 +105,10 @@ export class VisitUsComponent implements OnInit, OnDestroy {
     this.resetProgress();
   }
 
-  pauseCarousel(): void {
-    this.paused = true;
-  }
-
-  resumeCarousel(): void {
-    this.paused = false;
-  }
+  pauseCarousel(): void  { this.paused = true; }
+  resumeCarousel(): void { this.paused = false; }
 
   private startCarousel(): void {
-    // Run timers outside Angular zone to avoid triggering change detection
-    // on every tick — we call detectChanges() manually only when needed.
     this.ngZone.runOutsideAngular(() => {
       this.tickTimer = setInterval(() => {
         if (this.paused || this.lightboxOpen) return;
@@ -94,23 +117,20 @@ export class VisitUsComponent implements OnInit, OnDestroy {
         this.progressPct = Math.min((this.elapsed / SLIDE_DURATION_MS) * 100, 100);
 
         if (this.elapsed >= SLIDE_DURATION_MS) {
-          this.elapsed = 0;
+          this.elapsed     = 0;
           this.progressPct = 0;
-          // Advance slide inside Angular zone so bindings update
           this.ngZone.run(() => {
             this.carouselIndex = (this.carouselIndex + 1) % this.images.length;
           });
         }
 
-        // Update the progress bar binding
         this.cdr.detectChanges();
       }, TICK_MS);
     });
   }
 
   private stopCarousel(): void {
-    if (this.tickTimer)  clearInterval(this.tickTimer);
-    if (this.autoTimer)  clearInterval(this.autoTimer);
+    if (this.tickTimer) clearInterval(this.tickTimer);
   }
 
   private resetProgress(): void {

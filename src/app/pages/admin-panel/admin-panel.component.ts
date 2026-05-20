@@ -25,17 +25,15 @@ export class AdminPanelComponent implements OnInit {
   products     = this.ds.productsSignal;
   loading      = this.ds.loading;
 
-  loadError      = signal('');
-  activeTab      = signal<AdminTab>('categories');
-  modalType      = signal<ModalType>(null);
-  saving         = signal(false);
-  deleting       = signal<string | number | null>(null);
-  toast          = signal('');
-  uploadingImg   = signal(false);
-  navScrolled    = signal(false);
-  mgmtOpen       = signal(false);
-  logoutConfirm  = signal(false);
-  mobileMenuOpen = signal(false);
+  loadError     = signal('');
+  activeTab     = signal<AdminTab>('categories');
+  modalType     = signal<ModalType>(null);
+  saving        = signal(false);
+  deleting      = signal<string | number | null>(null);
+  toast         = signal('');
+  uploadingImg  = signal(false);
+  navScrolled   = signal(false);
+  logoutConfirm = signal(false);
 
   // ── Search & Category Filter ──────────────
   productSearch       = '';
@@ -77,14 +75,6 @@ export class AdminPanelComponent implements OnInit {
     this.navScrolled.set(window.scrollY > 40);
   }
 
-  // ── Mobile menu ───────────────────────────
-  toggleMobileMenu() { this.mobileMenuOpen.update(v => !v); }
-  closeMobileMenu()  { this.mobileMenuOpen.set(false); }
-
-  // ── Navbar dropdown ───────────────────────
-  toggleMgmt() { this.mgmtOpen.update(v => !v); }
-  closeMgmt()  { this.mgmtOpen.set(false); }
-
   // ── Sign-out ──────────────────────────────
   requestLogout() {
     this.logoutConfirm.set(true);
@@ -105,11 +95,11 @@ export class AdminPanelComponent implements OnInit {
   }
 
   // ── Data ──────────────────────────────────
- async loadAll() {
-  this.loadError.set('');
-  await this.ds.loadAll(true);   // <-- add true here
-  if (this.ds.error()) this.loadError.set(this.ds.error() ?? '');
-}
+  async loadAll() {
+    this.loadError.set('');
+    await this.ds.loadAll(true);
+    if (this.ds.error()) this.loadError.set(this.ds.error() ?? '');
+  }
 
   getCategoryById(id: string): Category | undefined {
     return this.ds.getCategoryById(id);
@@ -258,9 +248,39 @@ export class AdminPanelComponent implements OnInit {
         : await this.supabase.client.from('categories').insert(row).select();
 
       if (result.error) { this.showToast('Error: ' + result.error.message); return; }
+
+      if (this.editingId) {
+        // Patch only this category in the local signal — no page reload
+        this.ds.categoriesSignal.update(list =>
+          list.map(c => c.id === this.editingId
+            ? {
+                ...c,
+                name:        row.name,
+                subtitle:    row.subtitle    ?? undefined,
+                description: row.description ?? undefined,
+                image:       row.image       ?? undefined,
+                color:       row.color       ?? undefined
+              } as Category
+            : c
+          )
+        );
+      } else {
+        // Append the new category returned by Supabase
+        const created = result.data?.[0];
+        if (created) {
+          const newCat: Category = {
+            ...created,
+            subtitle:    created.subtitle    ?? undefined,
+            description: created.description ?? undefined,
+            image:       created.image       ?? undefined,
+            color:       created.color       ?? undefined
+          };
+          this.ds.categoriesSignal.update(list => [...list, newCat]);
+        }
+      }
+
       this.showToast(this.editingId ? 'Category updated ✓' : 'Category added ✓');
       this.closeModal();
-      await this.loadAll();
     } catch (err: any) {
       this.showToast('Unexpected error: ' + (err?.message ?? err));
     } finally {
@@ -276,8 +296,10 @@ export class AdminPanelComponent implements OnInit {
     try {
       const result = await this.supabase.client.from('categories').delete().eq('id', id).select();
       if (result.error) { this.showToast('Error: ' + result.error.message); return; }
+
+      // Remove only this category from the local signal — no page reload
+      this.ds.categoriesSignal.update(list => list.filter(c => c.id !== id));
       this.showToast('Category deleted');
-      await this.loadAll();
     } catch (err: any) {
       this.showToast('Unexpected error: ' + (err?.message ?? err));
     } finally {
@@ -309,9 +331,41 @@ export class AdminPanelComponent implements OnInit {
         : await this.supabase.client.from('products').insert(row).select();
 
       if (result.error) { this.showToast('Error: ' + result.error.message); return; }
+
+      if (this.editingId) {
+        // Patch only this product in the local signal — no page reload
+        this.ds.productsSignal.update(list =>
+          list.map(p => p.id === this.editingId
+            ? {
+                ...p,
+                name:        row.name,
+                description: row.description ?? undefined,
+                price:       row.price,
+                categoryId:  this.prodForm.categoryId,
+                image:       row.image    ?? undefined,
+                featured:    row.featured,
+                badge:       row.badge    ?? undefined
+              } as Product
+            : p
+          )
+        );
+      } else {
+        // Append the new product returned by Supabase, mapping category_id → categoryId
+        const created = result.data?.[0];
+        if (created) {
+          const newProduct: Product = {
+            ...created,
+            categoryId:  created.category_id,
+            description: created.description ?? undefined,
+            image:       created.image       ?? undefined,
+            badge:       created.badge       ?? undefined
+          };
+          this.ds.productsSignal.update(list => [...list, newProduct]);
+        }
+      }
+
       this.showToast(this.editingId ? 'Product updated ✓' : 'Product added ✓');
       this.closeModal();
-      await this.loadAll();
     } catch (err: any) {
       this.showToast('Unexpected error: ' + (err?.message ?? err));
     } finally {
@@ -327,8 +381,10 @@ export class AdminPanelComponent implements OnInit {
     try {
       const result = await this.supabase.client.from('products').delete().eq('id', id).select();
       if (result.error) { this.showToast('Error: ' + result.error.message); return; }
+
+      // Remove only this product from the local signal — no page reload
+      this.ds.productsSignal.update(list => list.filter(p => p.id !== id));
       this.showToast('Product deleted');
-      await this.loadAll();
     } catch (err: any) {
       this.showToast('Unexpected error: ' + (err?.message ?? err));
     } finally {

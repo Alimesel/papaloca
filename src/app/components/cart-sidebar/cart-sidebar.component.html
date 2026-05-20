@@ -1,124 +1,167 @@
-<!-- Full-screen cart overlay -->
+<!-- ══ Full-screen cart overlay ══ -->
 <div class="cart-overlay" [class.open]="cartService.isOpen()" role="dialog" aria-modal="true" aria-label="Carrinho de compras">
 
-  <!-- Backdrop (click to close) -->
+  <!-- Backdrop -->
   <div class="cart-backdrop" (click)="cartService.closeCart()"></div>
 
-  <!-- Main panel -->
+  <!-- Panel -->
   <div class="cart-panel">
 
     <!-- ── Header ── -->
     <header class="cart-header">
-      <div class="header-left">
-        <span class="cart-eyebrow">O Seu Pedido</span>
+
+      <div class="cart-header__left">
+        <span class="cart-eyebrow">
+          <span class="cart-eyebrow__line"></span>
+          O Seu Pedido
+        </span>
         <h2 class="cart-title">
-          Cesto de Compras
+          Cesto
           @if (cartService.totalItems() > 0) {
             <span class="cart-pill">{{ cartService.totalItems() }}</span>
           }
         </h2>
       </div>
-      <button class="close-btn" (click)="cartService.closeCart()" aria-label="Fechar carrinho">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
+
+      <button class="cart-close" (click)="cartService.closeCart()" aria-label="Fechar carrinho">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6"  x2="6"  y2="18"/>
+          <line x1="6"  y1="6"  x2="18" y2="18"/>
         </svg>
       </button>
+
     </header>
 
     <!-- ── Content ── -->
     <div class="cart-content">
 
+      <!-- ─ Empty state ─ -->
       @if (cartService.items().length === 0) {
-
-        <!-- Empty state -->
         <div class="cart-empty">
-          <div class="empty-illustration">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8">
+          <div class="cart-empty__icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.2">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 01-8 0"/>
             </svg>
           </div>
-          <h3>O seu cesto está vazio</h3>
-          <p>Descubra os nossos produtos artesanais e adicione algo delicioso ao seu pedido.</p>
-          <button class="empty-cta" (click)="browseMenu()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <h3 class="cart-empty__title">O cesto está vazio</h3>
+          <p class="cart-empty__sub">Adicione algo delicioso ao seu pedido.</p>
+          <button class="cart-empty__cta" (click)="browseMenu()">
+            Ver Menu
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
-            Ver Menu
           </button>
         </div>
+      }
 
-      } @else {
+      <!-- ─ Items list ─ -->
+      @if (cartService.items().length > 0) {
 
-        <!-- Items list -->
-        <div class="items-scroll">
-          <ul class="items-list">
+        <div class="cart-items-scroll">
+          <ul class="cart-items-list">
+
             @for (item of cartService.items(); track item.product.id) {
               <li class="cart-item">
 
-                <div class="item-img-wrap">
-                  <img [src]="item.product.image" [alt]="item.product.name">
+                <!-- Image -->
+                <div class="cart-item__img-wrap">
+                  <img [src]="item.product.image" [alt]="item.product.name" class="cart-item__img">
                 </div>
 
-                <div class="item-body">
-                  <div class="item-top">
-                    <span class="item-name">{{ item.product.name }}</span>
-                    <button class="remove-btn" (click)="cartService.removeFromCart(item.product.id)" aria-label="Remover artigo">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
+                <!-- Body -->
+                <div class="cart-item__body">
+
+                  <div class="cart-item__top">
+                    <h4 class="cart-item__name">{{ item.product.name }}</h4>
+                    <button
+                      class="cart-item__remove"
+                      (click)="cartService.removeFromCart(item.product.id)"
+                      aria-label="Remover">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                        <line x1="18" y1="6"  x2="6"  y2="18"/>
+                        <line x1="6"  y1="6"  x2="18" y2="18"/>
                       </svg>
                     </button>
                   </div>
 
-                  <span class="item-unit-price">F{{ item.product.price.toFixed(2) }} por unidade</span>
+                  <span class="cart-item__unit">{{ item.product.price.toFixed(2) }} F / un.</span>
 
-                  <div class="item-bottom">
-                    <div class="qty-control">
-                      <button class="qty-btn" (click)="cartService.updateQuantity(item.product.id, item.quantity - 1)" aria-label="Diminuir quantidade">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <div class="cart-item__bottom">
+                    <!-- Qty stepper -->
+                    <div class="cart-qty">
+                      <button
+                        class="cart-qty__btn"
+                        (click)="cartService.updateQuantity(item.product.id, item.quantity - 1)"
+                        aria-label="Diminuir">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                          <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
                       </button>
-                      <span class="qty-value">{{ item.quantity }}</span>
-                      <button class="qty-btn" (click)="cartService.updateQuantity(item.product.id, item.quantity + 1)" aria-label="Aumentar quantidade">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      <span class="cart-qty__val">{{ item.quantity }}</span>
+                      <button
+                        class="cart-qty__btn"
+                        (click)="cartService.updateQuantity(item.product.id, item.quantity + 1)"
+                        aria-label="Aumentar">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                          <line x1="12" y1="5" x2="12" y2="19"/>
+                          <line x1="5"  y1="12" x2="19" y2="12"/>
+                        </svg>
                       </button>
                     </div>
-                    <span class="item-line-price">{{ (item.product.price * item.quantity).toFixed(2) }} F</span>
+
+                    <!-- Line total -->
+                    <span class="cart-item__total">
+                      {{ (item.product.price * item.quantity).toFixed(2) }}<em>F</em>
+                    </span>
                   </div>
+
                 </div>
 
               </li>
             }
+
           </ul>
         </div>
 
-        <!-- ── Footer: Total + Actions ── -->
+        <!-- ── Footer ── -->
         <div class="cart-footer">
-          <div class="cart-total-row">
-            <span class="cart-total-label">Total</span>
-            <span class="cart-total-value">{{ cartService.totalPrice().toFixed(2) }} F</span>
+
+          <!-- Subtotal row -->
+          <div class="cart-total">
+            <span class="cart-total__label">Total</span>
+            <span class="cart-total__value">
+              {{ cartService.totalPrice().toFixed(2) }}<em>F</em>
+            </span>
           </div>
 
-          <div class="cart-footer-actions">
-            <button class="clear-all-btn" (click)="cartService.clearCart()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <!-- Actions -->
+          <div class="cart-footer__actions">
+            <button class="cart-clear" (click)="cartService.clearCart()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                 <polyline points="3 6 5 6 21 6"/>
                 <path d="M19 6l-1 14H6L5 6"/>
               </svg>
               Esvaziar cesto
             </button>
           </div>
+
         </div>
 
       }
 
     </div>
-    <!-- End .cart-content -->
+    <!-- /cart-content -->
 
   </div>
-  <!-- End .cart-panel -->
+  <!-- /cart-panel -->
 
 </div>
-<!-- End .cart-overlay -->

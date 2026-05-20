@@ -1,28 +1,25 @@
 <nav class="navbar" [class.scrolled]="scrolled()">
-
-  <!-- ══ MAIN BAR ══ -->
   <div class="nb-bar">
 
-    <!-- Logo -->
+    <!-- ── Logo ── -->
     <a routerLink="/" class="nb-logo" (click)="closeMobile()">
-      <img src="assets/images/logo.png" alt="Casa do Pão" class="nb-logo__img">
-      <div class="nb-logo__rule" aria-hidden="true"></div>
+      <img src="assets/images/papalocalogo.webp" alt="Papaloca" class="nb-logo__img">
       <div class="nb-logo__text">
-        <span class="nb-logo__name">Casa do Pão</span>
-        <span class="nb-logo__tagline">Loja de Doces Artesanais · Bissau</span>
+        <span class="nb-logo__name">Papaloca</span>
+        <span class="nb-logo__tagline">Restaurant</span>
       </div>
     </a>
 
-    <!-- Desktop links -->
+    <!-- ── Desktop links ── -->
     <ul class="nb-links" role="list">
       <li><a routerLink="/"           routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
-      <li><a routerLink="/categories" routerLinkActive="active">Categorias</a></li>
+    
       <li><a routerLink="/products"   routerLinkActive="active">Menu</a></li>
       <li><a routerLink="/about"      routerLinkActive="active">Sobre</a></li>
       <li><a routerLink="/visit"      routerLinkActive="active">Visit Us</a></li>
     </ul>
 
-    <!-- Actions -->
+    <!-- ── Actions ── -->
     <div class="nb-actions">
 
       <!-- Cart -->
@@ -38,12 +35,12 @@
         }
       </button>
 
-      <!-- Hamburger — mobile only -->
+      <!-- Hamburger -->
       <button
         class="nb-burger"
         [class.is-open]="mobileOpen()"
         (click)="toggleMobile()"
-        aria-label="Open menu"
+        aria-label="Toggle navigation menu"
         [attr.aria-expanded]="mobileOpen()">
         <span></span>
         <span></span>
@@ -52,41 +49,122 @@
 
     </div>
   </div>
-
 </nav>
 
-<!-- ══ MOBILE DRAWER — outside <nav> to avoid backdrop-filter stacking context ══ -->
-<div class="nb-drawer" [class.is-open]="mobileOpen()">
 
-  <!-- Close button -->
-  <button class="nb-drawer__close" (click)="closeMobile()" aria-label="Close menu">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="1.6">
-      <line x1="18" y1="6"  x2="6"  y2="18"/>
-      <line x1="6"  y1="6"  x2="18" y2="18"/>
-    </svg>
-  </button>
+<!-- ══════════════════════════════════════════════════
+     MOBILE DRAWER  ·  Dark luxury overlay
+     Outside <nav> to avoid stacking-context issues
+     ══════════════════════════════════════════════════ -->
+<div
+  class="nb-drawer"
+  [class.is-open]="mobileOpen()"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation menu">
 
-  <nav class="nb-drawer__nav">
-    <a routerLink="/"           (click)="closeMobile()" class="nb-drawer__link">Home</a>
-    <a routerLink="/categories" (click)="closeMobile()" class="nb-drawer__link">Categorias</a>
-    <a routerLink="/products"   (click)="closeMobile()" class="nb-drawer__link">Menu</a>
-    <a routerLink="/about"      (click)="closeMobile()" class="nb-drawer__link">Sobre</a>
-    <a routerLink="/visit"      (click)="closeMobile()" class="nb-drawer__link">Visit Us</a>
-  </nav>
+  <div class="nb-drawer__inner">
 
-  <div class="nb-drawer__footer">
-    <span class="nb-drawer__footer-text">Bissau, Guiné-Bissau</span>
-    <span aria-hidden="true">·</span>
-    <span class="nb-drawer__footer-text">Aberto a partir das 07:00</span>
-  </div>
+    <!-- ── Top: logo + close ── -->
+    <div class="nb-drawer__top">
 
-</div>
+      <a routerLink="/" class="nb-drawer__logo" (click)="closeMobile()">
+        <img src="assets/images/papalocalogo.webp" alt="Papaloca" class="nb-drawer__logo-img">
+        <div class="nb-drawer__logo-text">
+          <span class="nb-drawer__logo-name">Papaloca</span>
+          <span class="nb-drawer__logo-sub">Restaurant</span>
+        </div>
+      </a>
 
-<!-- Backdrop -->
+      <button class="nb-drawer__close" (click)="closeMobile()" aria-label="Close menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.6">
+          <line x1="18" y1="6"  x2="6"  y2="18"/>
+          <line x1="6"  y1="6"  x2="18" y2="18"/>
+        </svg>
+      </button>
+
+    </div>
+
+    <!-- ── Section label ── -->
+    <p class="nb-drawer__section-label">Navigation</p>
+
+    <!-- ── Nav links ── -->
+    <nav class="nb-drawer__nav" aria-label="Mobile navigation">
+
+      <a routerLink="/" (click)="closeMobile()" class="nb-drawer__item">
+        <span class="nb-drawer__index">01</span>
+        <span class="nb-drawer__link-text">Home</span>
+        <span class="nb-drawer__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </span>
+      </a>
+
+      
+
+      <a routerLink="/products" (click)="closeMobile()" class="nb-drawer__item">
+        <span class="nb-drawer__index">02</span>
+        <span class="nb-drawer__link-text">Menu</span>
+        <span class="nb-drawer__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </span>
+      </a>
+
+      <a routerLink="/about" (click)="closeMobile()" class="nb-drawer__item">
+        <span class="nb-drawer__index">03</span>
+        <span class="nb-drawer__link-text">Sobre</span>
+        <span class="nb-drawer__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </span>
+      </a>
+
+      <a routerLink="/visit" (click)="closeMobile()" class="nb-drawer__item">
+        <span class="nb-drawer__index">04</span>
+        <span class="nb-drawer__link-text">Visit Us</span>
+        <span class="nb-drawer__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </span>
+      </a>
+
+    </nav>
+
+    <!-- ── Divider ── -->
+    <div class="nb-drawer__divider">
+      <span>✦</span>
+    </div>
+
+    <!-- ── Footer info ── -->
+    <div class="nb-drawer__footer">
+      <div class="nb-drawer__info">
+        <span class="nb-drawer__info-label">Location</span>
+        <span class="nb-drawer__info-value">Bissau,<br>Guiné-Bissau</span>
+      </div>
+      <div class="nb-drawer__info">
+        <span class="nb-drawer__info-label">Hours</span>
+        <span class="nb-drawer__info-value">Open from<br>07:00 – 00:00</span>
+      </div>
+    </div>
+
+  </div><!-- /nb-drawer__inner -->
+</div><!-- /nb-drawer -->
+
+
+<!-- ── Backdrop ── -->
 @if (mobileOpen()) {
   <div class="nb-backdrop" (click)="closeMobile()" aria-hidden="true"></div>
 }
 
-<!-- Page spacer -->
+<!-- ── Page spacer ── -->
 <div class="nb-spacer"></div>
