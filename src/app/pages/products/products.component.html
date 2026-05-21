@@ -1,4 +1,4 @@
-<div class="pv-page">
+<div class="pv-page" (click)="onPageClick($event)">
 
   <!-- ══ Sticky category filter bar ══ -->
   <div class="pv-topbar">
@@ -26,6 +26,17 @@
   </div>
 
 
+  <!-- ══ Translating banner ══ -->
+  @if (translating()) {
+    <div class="pv-translate-banner" role="status" aria-live="polite">
+      <span class="pv-translate-banner__dot"></span>
+      <span class="pv-translate-banner__dot"></span>
+      <span class="pv-translate-banner__dot"></span>
+      <span class="pv-translate-banner__text">Translating menu…</span>
+    </div>
+  }
+
+
   <!-- ══ Scrollable product feed ══ -->
   <div class="pv-body" #pvBody>
     <div class="pv-feed">
@@ -41,11 +52,10 @@
               class="pv-card pv-reveal"
               [style.animation-delay]="(i * 0.07) + 's'">
 
-              <!-- Image -->
               <div class="pv-card__img-wrap">
                 <img
                   [src]="p.image"
-                  [alt]="p.name"
+                  [alt]="getName(p)"
                   class="pv-card__img"
                   loading="lazy"
                   (load)="onImgLoad($event)">
@@ -54,13 +64,21 @@
                 }
               </div>
 
-              <!-- Content -->
               <div class="pv-card__content">
                 <div class="pv-card__meta">
-                  <h3 class="pv-card__name">{{ p.name }}</h3>
-                  @if (p.description) {
-                    <p class="pv-card__desc">{{ p.description }}</p>
+
+                  @if (isPending(p)) {
+                    <span class="pv-skeleton pv-skeleton--name"></span>
+                  } @else {
+                    <h3 class="pv-card__name">{{ getName(p) }}</h3>
                   }
+
+                  @if (isPending(p)) {
+                    <span class="pv-skeleton pv-skeleton--desc"></span>
+                  } @else if (getDesc(p)) {
+                    <p class="pv-card__desc">{{ getDesc(p) }}</p>
+                  }
+
                 </div>
 
                 <div class="pv-card__footer">
@@ -100,7 +118,6 @@
 
         @for (cat of dataService.categories; track cat.id; let ci = $index) {
 
-          <!-- Category header divider -->
           <div class="pv-divider pv-reveal">
             <div class="pv-divider__left">
               <span class="pv-divider__num">{{ (ci + 1).toString().padStart(2, '0') }}</span>
@@ -126,7 +143,7 @@
                 <div class="pv-card__img-wrap">
                   <img
                     [src]="p.image"
-                    [alt]="p.name"
+                    [alt]="getName(p)"
                     class="pv-card__img"
                     loading="lazy"
                     (load)="onImgLoad($event)">
@@ -137,10 +154,19 @@
 
                 <div class="pv-card__content">
                   <div class="pv-card__meta">
-                    <h3 class="pv-card__name">{{ p.name }}</h3>
-                    @if (p.description) {
-                      <p class="pv-card__desc">{{ p.description }}</p>
+
+                    @if (isPending(p)) {
+                      <span class="pv-skeleton pv-skeleton--name"></span>
+                    } @else {
+                      <h3 class="pv-card__name">{{ getName(p) }}</h3>
                     }
+
+                    @if (isPending(p)) {
+                      <span class="pv-skeleton pv-skeleton--desc"></span>
+                    } @else if (getDesc(p)) {
+                      <p class="pv-card__desc">{{ getDesc(p) }}</p>
+                    }
+
                   </div>
 
                   <div class="pv-card__footer">
@@ -179,5 +205,88 @@
 
     </div>
   </div>
+
+
+  <!-- ══════════════════════════════════════════
+       LANGUAGE FAB  — floating bottom-right
+       ══════════════════════════════════════════ -->
+  <div class="pv-lang-fab" #langPanel>
+
+    <!-- Expanded language menu — opens upward -->
+    @if (langMenuOpen()) {
+      <div class="pv-lang-fab__menu" role="listbox" aria-label="Select language">
+
+        @for (lang of languages; track lang.code) {
+          <button
+            class="pv-lang-fab__option"
+            role="option"
+            [class.active]="currentLang() === lang.code"
+            [attr.aria-selected]="currentLang() === lang.code"
+            (click)="selectLanguage(lang)">
+
+            <span class="pv-lang-fab__opt-flag">{{ lang.flag }}</span>
+
+            <div class="pv-lang-fab__opt-text">
+              <span class="pv-lang-fab__opt-native">{{ lang.nativeName }}</span>
+              <span class="pv-lang-fab__opt-code">{{ lang.code.toUpperCase() }}</span>
+            </div>
+
+            @if (currentLang() === lang.code) {
+              <svg class="pv-lang-fab__opt-check" width="13" height="13"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            }
+
+          </button>
+        }
+
+      </div>
+    }
+
+    <!-- Trigger pill button -->
+    <button
+      class="pv-lang-fab__btn"
+      [class.open]="langMenuOpen()"
+      [class.translating]="translating()"
+      (click)="toggleLangMenu()"
+      [attr.aria-label]="'Language: ' + getCurrentLang().label"
+      aria-haspopup="listbox"
+      [attr.aria-expanded]="langMenuOpen()">
+
+      <!-- Spinner while translating -->
+      @if (translating()) {
+        <span class="pv-lang-fab__spinner" aria-hidden="true"></span>
+      } @else {
+        <!-- Globe icon -->
+        <svg class="pv-lang-fab__globe" width="17" height="17" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10
+                   15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      }
+
+      <!-- Current language flag + code -->
+      <span class="pv-lang-fab__label">
+        <span class="pv-lang-fab__flag">{{ getCurrentLang().flag }}</span>
+        <span class="pv-lang-fab__code">{{ getCurrentLang().code.toUpperCase() }}</span>
+      </span>
+
+      <!-- Chevron -->
+      <svg class="pv-lang-fab__chevron" width="10" height="10" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+
+    </button>
+
+  </div>
+  <!-- /pv-lang-fab -->
+
 
 </div>

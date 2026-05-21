@@ -8,23 +8,24 @@
 $red:        #dc2626;
 $red-dark:   #b91c1c;
 $red-pale:   rgba(220, 38, 38, 0.10);
-$red-rim:    rgba(220, 38, 38, 0.18);
+$red-rim:    rgba(220, 38, 38, 0.22);
 
 $ink:        #1a1a1a;
 $ink-body:   #3d3d3d;
 $ink-soft:   #7a7a7a;
 $ink-ghost:  #b0b0b0;
 
-$bg:         #f5f4f1;       /* warm off-white — premium feel     */
+$bg:         #f5f4f1;
 $card-bg:    #ffffff;
 $line:       #ebebeb;
 $line-soft:  rgba(0, 0, 0, 0.055);
 
-$bar-h:      68px;          /* topbar height                     */
-$nav-h:      62px;          /* global navbar assumed height      */
+$bar-h:      68px;
+$nav-h:      62px;       /* global bottom navbar height */
+$fab-gap:    16px;       /* space between FAB and bottom nav */
 
-$r-card:     20px;          /* card border-radius                */
-$r-img:      14px;          /* image corner inside card          */
+$r-card:     20px;
+$r-img:      14px;
 
 $ease:       cubic-bezier(0.25, 0.46, 0.45, 0.94);
 $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -40,11 +41,12 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   overflow: hidden;
   padding-top: $nav-h;
   background: $bg;
+  position: relative;   /* stacking context for the FAB */
 }
 
 
 /* ════════════════════════════════════════════════
-   STICKY CATEGORY TOPBAR
+   STICKY CATEGORY TOPBAR  (unchanged from original)
    ════════════════════════════════════════════════ */
 .pv-topbar {
   flex-shrink: 0;
@@ -89,7 +91,6 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap;
   transition: color 0.22s ease;
 
-  /* Animated underline */
   &::after {
     content: '';
     position: absolute;
@@ -109,9 +110,56 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   &.active {
     color: $red;
     font-weight: 600;
-
     &::after { transform: scaleX(1); }
   }
+}
+
+
+/* ════════════════════════════════════════════════
+   TRANSLATING BANNER
+   ════════════════════════════════════════════════ */
+.pv-translate-banner {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  background: $red-pale;
+  border-bottom: 1px solid $red-rim;
+  animation: bannerIn 0.28s $ease both;
+  overflow: hidden;
+}
+
+@keyframes bannerIn {
+  from { opacity: 0; height: 0; }
+  to   { opacity: 1; height: 32px; }
+}
+
+.pv-translate-banner__text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $red;
+}
+
+.pv-translate-banner__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: $red;
+  animation: dotBounce 0.9s ease-in-out infinite;
+
+  &:nth-child(1) { animation-delay: 0s; }
+  &:nth-child(2) { animation-delay: 0.18s; }
+  &:nth-child(3) { animation-delay: 0.36s; }
+}
+
+@keyframes dotBounce {
+  0%, 100% { transform: translateY(0);    opacity: 0.35; }
+  50%       { transform: translateY(-5px); opacity: 1;    }
 }
 
 
@@ -130,7 +178,8 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .pv-feed {
-  padding: 20px 16px 100px;
+  /* Extra bottom padding so last card isn't hidden behind the FAB */
+  padding: 20px 16px 120px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -138,7 +187,7 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
 
 
 /* ════════════════════════════════════════════════
-   CATEGORY DIVIDER  (all-view)
+   CATEGORY DIVIDER
    ════════════════════════════════════════════════ */
 .pv-divider {
   display: flex;
@@ -226,8 +275,6 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
   cursor: default;
-
-  /* Subtle press animation on mobile tap */
   transition: transform 0.18s $ease, box-shadow 0.18s $ease;
 
   &:active {
@@ -239,8 +286,6 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 }
 
-
-/* ── Card image ── */
 .pv-card__img-wrap {
   position: relative;
   flex-shrink: 0;
@@ -280,8 +325,6 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
 }
 
-
-/* ── Card content (right column) ── */
 .pv-card__content {
   flex: 1;
   min-width: 0;
@@ -305,8 +348,6 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   letter-spacing: 0.005em;
   line-height: 1.25;
   margin: 0;
-
-  /* Clamp to 2 lines */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -321,15 +362,12 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   line-height: 1.5;
   margin: 0;
   letter-spacing: 0.008em;
-
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-
-/* ── Card footer: price + add button ── */
 .pv-card__footer {
   display: flex;
   align-items: center;
@@ -354,7 +392,6 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 }
 
-/* ── Circular add / added button ── */
 .pv-card__add {
   flex-shrink: 0;
   width: 42px;
@@ -365,14 +402,11 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   background: $red-pale;
   color: $red;
-
   box-shadow:
     0 0 0 1.5px $red-rim,
     0 3px 10px rgba(220, 38, 38, 0.14);
-
   transition:
     background    0.22s $ease,
     color         0.22s $ease,
@@ -391,13 +425,10 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow:
       0 0 0 1.5px $red,
       0 6px 18px rgba(220, 38, 38, 0.32);
-
     svg { transform: rotate(90deg); }
   }
 
-  &:active {
-    transform: scale(0.88);
-  }
+  &:active { transform: scale(0.88); }
 
   &.added {
     background: $red;
@@ -405,17 +436,293 @@ $spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow:
       0 0 0 1.5px $red,
       0 6px 18px rgba(220, 38, 38, 0.30);
-
-    svg {
-      animation: checkPop 0.35s $spring both;
-    }
+    svg { animation: checkPop 0.35s $spring both; }
   }
 }
 
 @keyframes checkPop {
   0%   { transform: scale(0.5) rotate(-15deg); opacity: 0; }
-  60%  { transform: scale(1.2) rotate(4deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  60%  { transform: scale(1.2) rotate(4deg);   opacity: 1; }
+  100% { transform: scale(1)   rotate(0deg);   opacity: 1; }
+}
+
+
+/* ════════════════════════════════════════════════
+   LANGUAGE  FAB  — fixed, bottom-right
+   ════════════════════════════════════════════════ */
+.pv-lang-fab {
+  /* Fixed inside the page column — sits above bottom nav */
+  position: fixed;
+  bottom: calc(#{$nav-h} + #{$fab-gap});
+  right: 18px;
+  z-index: 50;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* ── Trigger pill ── */
+.pv-lang-fab__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 44px;
+  padding: 0 16px 0 13px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+
+  /* Frosted glass pill */
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+
+  color: $ink-soft;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.10),
+    0 8px 28px rgba(0, 0, 0, 0.12),
+    0 0 0 1.5px rgba(0, 0, 0, 0.07);
+
+  transition:
+    color        0.22s ease,
+    background   0.22s ease,
+    box-shadow   0.22s ease,
+    transform    0.18s $spring;
+
+  &:hover {
+    color: $red;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow:
+      0 4px 12px rgba(220, 38, 38, 0.14),
+      0 12px 36px rgba(220, 38, 38, 0.16),
+      0 0 0 1.5px $red-rim;
+  }
+
+  &.open {
+    color: $red;
+    background: #fff;
+    box-shadow:
+      0 4px 14px rgba(220, 38, 38, 0.18),
+      0 14px 40px rgba(220, 38, 38, 0.18),
+      0 0 0 1.5px $red;
+  }
+
+  &.translating {
+    pointer-events: none;
+    opacity: 0.75;
+  }
+
+  &:active { transform: scale(0.94); }
+}
+
+.pv-lang-fab__globe {
+  flex-shrink: 0;
+  stroke: currentColor;
+  opacity: 0.8;
+}
+
+.pv-lang-fab__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pv-lang-fab__flag {
+  font-size: 1.05rem;
+  line-height: 1;
+  /* Crisp flag rendering on retina */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.pv-lang-fab__code {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+.pv-lang-fab__chevron {
+  flex-shrink: 0;
+  stroke: currentColor;
+  opacity: 0.5;
+  transition: transform 0.24s $ease;
+
+  .pv-lang-fab__btn.open & {
+    transform: rotate(180deg);
+  }
+}
+
+/* ── Spinner (while translating) ── */
+.pv-lang-fab__spinner {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border: 2.5px solid $red-rim;
+  border-top-color: $red;
+  border-radius: 50%;
+  animation: langSpin 0.7s linear infinite;
+}
+
+@keyframes langSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Dropdown panel (opens upward) ── */
+.pv-lang-fab__menu {
+  /* Sits above the trigger — calc aligns bottom of menu to top of button gap */
+  background: $card-bg;
+  border: 1.5px solid $line;
+  border-radius: 18px;
+  padding: 6px;
+  min-width: 188px;
+
+  box-shadow:
+    0 -2px 8px rgba(0, 0, 0, 0.04),
+    0 8px 32px rgba(0, 0, 0, 0.11),
+    0 0 0 1px $line-soft;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  /* Slide up from below */
+  animation: fabMenuIn 0.24s $ease both;
+  transform-origin: bottom right;
+}
+
+@keyframes fabMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Language option row ── */
+.pv-lang-fab__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: $ink-soft;
+  transition: background 0.17s ease, color 0.17s ease;
+
+  &:hover {
+    background: $bg;
+    color: $ink;
+  }
+
+  &.active {
+    background: $red-pale;
+    color: $red;
+  }
+}
+
+.pv-lang-fab__opt-flag {
+  font-size: 1.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pv-lang-fab__opt-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pv-lang-fab__opt-native {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+
+  .pv-lang-fab__option.active & {
+    font-weight: 600;
+  }
+}
+
+.pv-lang-fab__opt-code {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.pv-lang-fab__opt-check {
+  flex-shrink: 0;
+  margin-left: auto;
+  stroke: $red;
+}
+
+
+/* ════════════════════════════════════════════════
+   SKELETON LOADING PLACEHOLDERS
+   ════════════════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: -300px 0; }
+  100% { background-position:  300px 0; }
+}
+
+%skeleton-base {
+  display: block;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    #e8e8e6 0%,
+    #f5f4f1 45%,
+    #e8e8e6 90%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.pv-skeleton {
+  @extend %skeleton-base;
+
+  &--name {
+    height: 18px;
+    width: 78%;
+    margin-bottom: 4px;
+
+    &::after {
+      content: '';
+      @extend %skeleton-base;
+      display: block;
+      height: 14px;
+      width: 52%;
+      margin-top: 6px;
+    }
+  }
+
+  &--desc {
+    height: 12px;
+    width: 100%;
+
+    &::after {
+      content: '';
+      @extend %skeleton-base;
+      display: block;
+      height: 12px;
+      width: 68%;
+      margin-top: 5px;
+    }
+  }
 }
 
 
