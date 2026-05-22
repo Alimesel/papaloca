@@ -35,9 +35,9 @@ export class VisitUsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   images = [
     { src: 'assets/images/papalocav1.webp', label: ''  },
-    { src: 'assets/images/papalocav2.webp', label: ''    },
-    { src: 'assets/images/papalocav3.webp', label: ''    },
-    { src: 'assets/images/papalocav4.webp', label: ''    },
+    { src: 'assets/images/papalocav2.webp', label: ''  },
+    { src: 'assets/images/papalocav3.webp', label: ''  },
+    { src: 'assets/images/papalocav4.webp', label: ''  },
   ];
 
   /* ── Carousel state ── */

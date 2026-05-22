@@ -46,7 +46,7 @@
          (mouseleave)="resumeCarousel()">
 
       <div class="vu-carousel__track"
-           [style.transform]="'translateX(-' + (carouselIndex * 100) + 'vw)'">
+           [style.transform]="'translateX(-' + (carouselIndex * 100) + '%)'">
 
         @for (img of images; track img.src; let i = $index) {
           <div class="vu-carousel__slide" (click)="openLightbox(i)">
@@ -258,8 +258,6 @@
     </div>
 
   </section>
-
-
 
 
   <!-- ══════════════════════════════════════════
