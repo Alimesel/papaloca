@@ -43,7 +43,7 @@ export class DataService {
 
     try {
       const [catsRes, prodsRes] = await Promise.all([
-        this.supabase.client.from('categories').select('*').order('id'),
+        this.supabase.client.from('categories').select('*').order('sort_order', { ascending: true }), // ← changed
         this.supabase.client.from('products').select('*').order('id')
       ]);
 
